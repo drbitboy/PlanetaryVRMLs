@@ -65,7 +65,7 @@ longitudes.
 
 ###NextFlyby/
 
-Final simulation of Stardust/NExT flyby of comet 9P/Tempel 1, finalized one day before the flyby on 14.Feb, 2011.
+Simulation of Stardust/NExT flyby of comet 9P/Tempel 1, finalized one day before the flyby on 14.Feb, 2011.
 An earlier version of this VRML was used to set the Time Of Arrival (TOA) Trajectory Correction Maneuver (TCM) on year
 earlier; the goal of the TCM was to arrive at the comet and be able to view a lit impact site as created by the Deep Impact
 mission in 2005.
