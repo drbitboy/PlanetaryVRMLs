@@ -116,7 +116,7 @@ DEF Collector Script {
     return (v-lo)/(hi-lo);
   }
   function slideIn(v) {
-    if ( timeSensor.isActive ) { timeSensor.startTime = 0; }
+    if ( timeSensor.isActive ) { timeSensor.stopTime = timeSensor.startTime + 0.01; }
     slideOut = scaleToOne(v.y*v.y*v.y,-.125,.125);
     txtOut.string[1] = myround(slideOut,3);
   }
