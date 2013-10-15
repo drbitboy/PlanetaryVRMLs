@@ -3,6 +3,9 @@ PlanetaryVRMLs
 
 VRMLs I have created in support of planetary science.
 
+As this is GitHub, you will need to copy all files from here to a local directory to see
+these simulations properly using a VRML viewer.
+
 The only VRML viewer up to the task of rendering these VRMLs, in my experience, is the Windows Cortona
 viewer by Parallel Graphics
 (http://www.cortona3d.com/cortona3d-viewer-download),
