@@ -1,0 +1,157 @@
+#VRML V2.0 utf8
+
+PROTO RED [ field SFFloat trans 0.0 ] { Appearance { material Material { transparency IS trans emissiveColor .6 0 0 diffuseColor 0.3 0 0 } } }
+PROTO YELLOW [ field SFFloat trans 0.0 ] { Appearance { material Material { transparency IS trans emissiveColor .6 .6 0 diffuseColor 0.3 0.3 0 } } }
+PROTO GREEN [ field SFFloat trans 0.0 ] { Appearance { material Material { transparency IS trans emissiveColor 0 .6 0 diffuseColor 0 0.3 0 } } }
+PROTO CYAN [ field SFFloat trans 0.0 ] { Appearance { material Material { transparency IS trans emissiveColor 0 .6 .6 diffuseColor 0 0.3 .3 } } }
+PROTO BLUE [ field SFFloat trans 0.0 ] { Appearance { material Material { transparency IS trans emissiveColor 0 0 .6 diffuseColor 0 0 .3 } } }
+PROTO ORANGE [ field SFFloat trans 0.0 ] { Appearance { material Material { transparency IS trans emissiveColor .8 .4 0 diffuseColor 0.4 .2 0 } } }
+PROTO DIFGREY [ ] { Appearance { material Material { emissiveColor 0.05 0.05 0.05 diffuseColor .6 .6 .6 } } }
+PROTO TOUCHTRANS [ ] { Appearance { material Material { emissiveColor 0.6 0.6 0.0 diffuseColor 0 0 0 transparency .75 } } }
+PROTO SEGMENT
+  [ field SFVec3f t 0 0 0 
+    field SFVec3f s 2 2 2
+  ] {
+  Transform {
+    translation IS t
+    children [
+      Shape { geometry Box { size IS s } appearance GREEN { trans 0.6 } }
+  ] } }
+
+EXTERNPROTO Apgen [
+  eventIn SFFloat fractionIn      ### Zero to one
+  eventOut SFFloat TminusTZero    ### Actual time wrt Zero
+  eventOut SFVec3f translation    ### Translation from S/C to comet center in ADCS frame
+  eventOut SFRotation rotation    ### Rotation from ADCS to J2000
+  eventOut SFVec3f FromSun        ### Direction light goes to from Sun, J2000
+  eventOut SFRotation ToSun       ### Orientation of arrow pointing to Sun
+  eventOut SFRotation ToEarth     ### Orientation of arrow pointing to Earth
+  eventOut MFString info          ### Information:  Time; ExpID_Image#; Sequence name; IR Mode
+] [ "flyby_externproto.wrl#Apgen" ]
+
+NavigationInfo {
+  headlight FALSE
+}
+
+DEF TIMLOOP TimeSensor { cycleInterval 45 loop FALSE enabled TRUE stopTime 1 }
+
+Group { children [
+
+  DEF TARGETS Transform {
+    rotation 1 0 0 0
+    translation  700 0 0
+    children [
+
+      ### DirectionalLight here breaks InstantReality
+      ###DEF SOLARDIR DirectionalLight { direction -1 -1 -0.5 on TRUE intensity 2 }
+
+      ### PointLight works for InstantReality (on Ubuntu, anyway):
+      DEF SOLARPOS Transform {
+        rotation 1 0 0 0
+        children [
+        Transform {
+          translation  0 700 0
+          children [
+            PointLight { on TRUE intensity 2 }
+        ] }
+      ] }
+
+      DEF TARGETSENSOR TouchSensor { }
+
+      Shape { geometry Sphere { radius .6 }  appearance DIFGREY { } }
+
+      ### +X, +Y, +Z
+      Transform { translation .4 0 0 rotation 0 0 1 -1.5708 children [ Shape { geometry Cylinder { height 0.8 radius .04 } appearance RED { } } ] }
+      Transform { translation 0 .4 0 rotation 1 0 0 0 children [ Shape { geometry Cylinder { height 0.8 radius .04 } appearance GREEN { } } ] }
+      Transform { translation 0 0 .4 rotation 1 0 0 1.5708 children [ Shape { geometry Cylinder { height 0.8 radius .04 } appearance BLUE { } } ] }
+
+      ### Vectors to Sun and Earth
+
+      DEF SUNVEC Transform { children [
+        Transform { translation 0 .35 0 children [ Shape { geometry Cylinder { height 0.8 radius .05 } appearance YELLOW { } } ] }
+      ] }
+
+      DEF EARTHVEC Transform { children [
+        Transform { translation 0 .3 0 children [ Shape { geometry Cylinder { height 0.8 radius .06 } appearance CYAN { } } ] }
+      ] }
+
+      DEF Apgen_0 Apgen { }
+
+    ]
+  }
+
+  ### Frames and touch sensor
+
+  Transform {
+    translation 600 0 0
+    children [
+      Transform {
+        translation -10 0 -.7
+        children [
+          DEF SLIDESENSOR TouchSensor { }
+          Shape { geometry Box { size .01 1.2 0.15 } appearance TOUCHTRANS { } }
+      ] }
+      Shape { geometry Box { size 0.001 1.518 .006 } appearance RED { trans .6 } }  ### HRIIR
+
+      SEGMENT { t 0 -.6 0 s .01 .005 1.2 }  ### HRIVIS
+      SEGMENT { t 0 .6 0 s .01 .005 1.2 }
+      SEGMENT { t 0 0 -.6 s .01 1.2 .005 }
+      SEGMENT { t 0 0 .6 s .01 1.2 .005 }
+
+      Transform { translation 0 0 .7 scale .1 .1 .1 children [
+        Billboard { axisOfRotation 0 0 0 children [
+          Shape { 
+            geometry DEF TXTOUT Text { string [ "1", "2" ] fontStyle FontStyle { justify [ "END" ] } }
+          }
+        ] }
+      ] }
+  ] }
+
+] }  ## children, Group
+
+DEF Collector Script {
+  field SFNode timeSensor USE TIMLOOP
+  eventIn SFVec3f slideIn
+  eventOut SFFloat slideOut
+  field SFNode txtOut USE TXTOUT
+  url "javascript:
+  function myround(v,n) {
+    if ( v==0.0) { return v; }
+    if ( v<0.0) { return -myround(-v,n); }
+    modu=Math.pow(10.0,n*1.0);
+    return Math.round(v*modu)/modu;
+  }
+  function scaleToOne( v, lo, hi) {
+    if ( v > hi) return 1.0;
+    if ( v < lo) return 0.0;
+    if ( lo>=hi) return 0.0;
+    return (v-lo)/(hi-lo);
+  }
+  function slideIn(v) {
+    if ( timeSensor.isActive ) { timeSensor.stopTime = timeSensor.startTime + 0.01; }
+    slideOut = scaleToOne(v.y*v.y*v.y,-.125,.125);
+    txtOut.string[1] = myround(slideOut,3);
+  }
+  "
+}
+### ADCS FRAME:  +X is boresight; +Y is down; +Z is left.
+
+DEF VIEWPOINT Viewpoint { position 0 0 0 orientation -1 0 1 3.14159 fieldOfView .0026 }
+
+########################################################################
+### Routes:
+
+ROUTE TARGETSENSOR.touchTime TO TIMLOOP.set_startTime
+
+ROUTE SLIDESENSOR.hitPoint_changed TO Collector.slideIn
+
+ROUTE TIMLOOP.fraction_changed TO Apgen_0.fractionIn
+ROUTE Collector.slideOut TO Apgen_0.fractionIn
+
+ROUTE Apgen_0.rotation TO TARGETS.rotation
+ROUTE Apgen_0.translation TO TARGETS.translation
+#For InstantReality
+ROUTE Apgen_0.ToSun TO SOLARPOS.rotation
+ROUTE Apgen_0.ToSun TO SUNVEC.rotation
+ROUTE Apgen_0.ToEarth TO EARTHVEC.rotation
+ROUTE Apgen_0.info TO TXTOUT.string
