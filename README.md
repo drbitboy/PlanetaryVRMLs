@@ -14,6 +14,9 @@ Update:  Apparently that is an old 32-bit Cortona; the latest one seems to have 
 InstantReality on Ubuntu seems to work pretty well, although it does not handle the .hitPoint_changed
 event properly under HartleyFlyby/.
 
+Update II:  The presence of a DirectionalLight node inhibited the .hitPoint_changed event;
+created Carcich_flyby_instantreality.wrl under HartleyFlyby/ that works with InstantReality.
+
 
 ###NextFlyby/
 
@@ -67,6 +70,8 @@ Moving the cursor over the gold bar on the right browses over time;
 clicking on the shape starts an animation of the flyby.
 
 See the file Carcich_103p_vrml.png for more legend information.
+
+####N.B. Use Carcich_flyby_instantreality.wrl if using InstantReality viewer.
 
 
 
