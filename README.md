@@ -25,7 +25,7 @@ An earlier version of this VRML was used to set the Time Of Arrival (TOA) Trajec
 earlier; the goal of the TCM was to arrive at the comet and be able to view a lit impact site as created by the Deep Impact
 mission in 2005.
 
-Includes rotation of image due to mirror rotation, and generates view that are strikingly close to the actual images,
+Includes rotation of image due to mirror rotation, and generates views that are strikingly close to the actual images,
 a testimony to the exceptional effort put forth by the Science Team to develop the TOA TCM.
 
 Click and Drag on bar at top to simulate passage of time around flyby.
