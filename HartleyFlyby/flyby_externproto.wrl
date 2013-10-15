@@ -8,7 +8,7 @@ PROTO Apgen [
   eventOut SFVec3f FromSun        ### Direction light goes to from Sun, J2000
   eventOut SFRotation ToSun       ### Orientation of arrow pointing to Sun
   eventOut SFRotation ToEarth     ### Orientation of arrow pointing to Earth
-  eventOut MFString info          ### Information
+  eventOut MFString info          ### Information:  Time; ExpID_Image#; Sequence name; IR Mode
 ] {
   Group { children [
     DEF X2Script Script {
