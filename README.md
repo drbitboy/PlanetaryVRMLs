@@ -7,7 +7,7 @@ The only VRML viewer up to the task of rendering these VRMLs, in my experience, 
 viewer by Parallel Graphics
 (http://www.cortona3d.com/cortona3d-viewer-download),
 running as a plugin to Internet Explorer.
-All other viewers, from Octaga to the "crap promises" of VRML, typically fail in some way,
+All other viewers, from Octaga to the "crap promises" of FreeWRL, fail in some way,
 typically handling the ECMAscript interactions.
 
 
