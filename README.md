@@ -10,6 +10,10 @@ running as a plugin to Internet Explorer.
 All other viewers, from Octaga to the "crap promises" of FreeWRL, fail in some way,
 typically handling the ECMAscript interactions.
 
+Update:  Apparently that is an old 32-bit Cortona; the latest one seems to have problems.
+InstantReality on Ubuntu seems to work pretty well, although it does not handle the .hitPoint_changed
+event properly under HartleyFlyby/.
+
 
 ###NextFlyby/
 
