@@ -71,7 +71,7 @@ clicking on the shape starts an animation of the flyby.
 
 See the file Carcich_103p_vrml.png for more legend information.
 
-####N.B. Use Carcich_flyby_instantreality.wrl if using InstantReality viewer.
+######N.B. Use Carcich_flyby_instantreality.wrl if using InstantReality viewer.
 
 
 
