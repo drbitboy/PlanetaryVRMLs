@@ -52,7 +52,7 @@ Group { children [
         Transform {
           translation  0 700 0
           children [
-            PointLight { on TRUE intensity 2 }
+            PointLight { radius 1e6 on TRUE intensity 2 }
         ] }
       ] }
 
